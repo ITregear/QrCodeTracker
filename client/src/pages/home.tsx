@@ -18,7 +18,13 @@ export default function Home() {
             <Grid className="h-6 w-6" />
             <h1 className="text-xl font-semibold">QR Scanner</h1>
           </div>
-          <div className="ml-auto">
+          <div className="ml-auto flex gap-4">
+            <Link href="/samples">
+              <Button variant="outline">
+                <QrCode className="mr-2 h-4 w-4" />
+                View Sample QR Codes
+              </Button>
+            </Link>
             <Link href="/scanner">
               <Button className="shadow-lg hover:shadow-xl transition-all">
                 <QrCode className="mr-2 h-4 w-4" />
