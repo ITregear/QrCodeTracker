@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { QrCode, Clock, Grid } from "lucide-react";
+import { QrCode, Clock, Grid, Plus } from "lucide-react";
 import type { ScannedData, Product } from "@shared/schema";
 
 type ScannedDataWithProduct = ScannedData & { product: Product };
@@ -21,6 +21,12 @@ export default function Home() {
             <h1 className="text-xl font-semibold">QR Scanner</h1>
           </div>
           <div className="ml-auto flex gap-4">
+            <Link href="/add-product">
+              <Button variant="outline">
+                <Plus className="mr-2 h-4 w-4" />
+                Add New Product
+              </Button>
+            </Link>
             <Link href="/samples">
               <Button variant="outline">
                 <QrCode className="mr-2 h-4 w-4" />
@@ -69,8 +75,8 @@ export default function Home() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <img 
-                    src={item.product.imageUrl} 
+                  <img
+                    src={item.product.imageUrl}
                     alt={item.product.name}
                     className="w-full h-48 object-cover rounded-lg mb-4"
                   />

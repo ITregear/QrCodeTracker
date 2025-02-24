@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer } from "http";
 import { storage } from "./storage";
-import { insertScannedDataSchema } from "@shared/schema";
+import { insertScannedDataSchema, insertProductSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express) {
   app.get("/api/scanned/:qrId", async (req, res) => {
@@ -50,6 +50,17 @@ export async function registerRoutes(app: Express) {
   app.get("/api/products", async (_req, res) => {
     const products = await storage.getAllProducts();
     res.json(products);
+  });
+
+  app.post("/api/products", async (req, res) => {
+    try {
+      const data = insertProductSchema.parse(req.body);
+      const saved = await storage.saveProduct(data);
+      res.status(201).json(saved);
+    } catch (error) {
+      console.error("Error saving product:", error);
+      res.status(400).json({ message: "Invalid data format" });
+    }
   });
 
   return createServer(app);

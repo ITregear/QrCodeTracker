@@ -17,6 +17,7 @@ export default function Scanner() {
     mutationFn: async (qrId: string) => {
       return await apiRequest("POST", "/api/scanned", {
         qrId,
+        scannedAt: new Date().toISOString()
       });
     },
     onSuccess: () => {
