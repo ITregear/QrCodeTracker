@@ -4,29 +4,44 @@ A web-based QR code scanner application that retrieves product information from 
 
 ## Features
 
-### 1. Product Scanning
-![QR Scanner](https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RWBrzy?ver=85d4)
+### 1. Product Scanning and History
+![Home Page](attached_assets/image_1740415963534.png)
+
+The home page displays your scan history with detailed product information including:
+- Product name and category
+- Price information in a clear format
+- Scan timestamp
+- Organized display of product specifications
+- High-quality product images
+
+### 2. QR Code Scanner
+![Scanner Interface](attached_assets/image_1740415994971.png)
 
 - Access the scanner through the "Scan New Code" button
 - Point your device's camera at a product QR code
-- View detailed product information instantly after scanning
-- Automatic history tracking of all scanned items
+- Real-time QR code detection within the frame
+- Instant feedback on successful scans
 
-### 2. Product Management
-- Add new products to the database
-- Generate unique QR codes for each product
-- Download QR codes for printing or sharing
-- View comprehensive product details including:
-  - Product name and category
-  - Price information
-  - Product specifications
-  - High-quality product images
+### 3. Product Management
+![Add Product Form](attached_assets/image_1740416012030.png)
 
-### 3. Scan History
-- Track all previously scanned items
-- View scan timestamps
-- Access full product details from scan history
-- Organized display of product specifications
+- Add new products with a user-friendly form
+- Required fields:
+  - Product Name
+  - Category
+  - Price
+  - Image URL
+  - Specifications (in JSON format)
+- Automatic QR code generation
+- Download option for generated QR codes
+
+### 4. Sample QR Codes
+![Sample QR Codes](attached_assets/image_1740416038115.png)
+
+- View sample product QR codes
+- Download QR codes for testing
+- View product specifications
+- Easy access to test the scanning functionality
 
 ## Getting Started
 
@@ -85,7 +100,7 @@ The application will be available at `http://localhost:5000`
 
 1. Click "Scan New Code" in the navigation bar
 2. Allow camera access when prompted
-3. Point your camera at a product QR code
+3. Position the QR code within the scanning frame
 4. View the product details after successful scan
 
 ### Viewing Sample QR Codes
@@ -105,9 +120,12 @@ The application will be available at `http://localhost:5000`
    - Scan timestamp
    - Detailed specifications
 
-## Notes
+## Technical Notes
 
 - All prices are stored in cents and displayed in dollars
 - Product specifications should be provided in valid JSON format
 - QR codes are automatically generated using the product ID
 - The scanner works best in well-lit conditions
+- Database schema includes:
+  - products table (product details)
+  - scanned_data table (scan history)
