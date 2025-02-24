@@ -15,16 +15,10 @@ export default function Scanner() {
 
   const saveScan = useMutation({
     mutationFn: async (qrId: string) => {
-      try {
-        const data = JSON.parse(qrId);
-        return await apiRequest("POST", "/api/scanned", {
-          qrId,
-          data,
-          scannedAt: new Date().toISOString(),
-        });
-      } catch {
-        throw new Error("Invalid QR code format. Expected JSON data.");
-      }
+      return await apiRequest("POST", "/api/scanned", {
+        qrId,
+        scannedAt: new Date().toISOString(),
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/scanned"] });
