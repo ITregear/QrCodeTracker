@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocation } from "wouter";
@@ -12,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Download, Plus } from "lucide-react";
 import { insertProductSchema, type InsertProduct } from "@shared/schema";
 import { useMutation } from "@tanstack/react-query";
@@ -41,10 +43,10 @@ export default function AddProduct() {
       if (!data.productId) {
         data.productId = `PROD-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
       }
-      
+
       // Convert price to cents
       data.price = Math.round(Number(data.price) * 100);
-      
+
       // Ensure specs is an object
       if (typeof data.specs === 'string') {
         try {
@@ -149,7 +151,7 @@ export default function AddProduct() {
                           type="number" 
                           step="0.01"
                           {...field}
-                          onChange={(e) => field.onChange(e.target.value)}
+                          onChange={(e) => field.onChange(parseFloat(e.target.value))}
                         />
                       </FormControl>
                       <FormMessage />
@@ -164,7 +166,7 @@ export default function AddProduct() {
                     <FormItem>
                       <FormLabel>Image URL</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} placeholder="https://example.com/image.jpg" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -178,10 +180,15 @@ export default function AddProduct() {
                     <FormItem>
                       <FormLabel>Specifications (JSON)</FormLabel>
                       <FormControl>
-                        <Input 
-                          as="textarea"
+                        <Textarea 
                           {...field}
                           value={typeof field.value === 'object' ? JSON.stringify(field.value, null, 2) : field.value}
+                          placeholder={`{
+  "processor": "Intel i7",
+  "memory": "16GB",
+  "storage": "512GB SSD"
+}`}
+                          className="font-mono min-h-[150px]"
                         />
                       </FormControl>
                       <FormMessage />

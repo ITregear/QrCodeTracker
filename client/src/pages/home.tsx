@@ -7,6 +7,31 @@ import type { ScannedData, Product } from "@shared/schema";
 
 type ScannedDataWithProduct = ScannedData & { product: Product };
 
+function formatSpecification(specs: Record<string, any>): JSX.Element {
+  return (
+    <div className="space-y-2">
+      {Object.entries(specs).map(([key, value]) => (
+        <div key={key} className="flex items-start justify-between gap-4">
+          <span className="font-medium capitalize">{key.replace(/_/g, ' ')}</span>
+          <span className="text-right">
+            {Array.isArray(value) ? (
+              <div className="flex flex-wrap justify-end gap-1">
+                {value.map((item, i) => (
+                  <span key={i} className="bg-primary/10 text-primary px-2 py-0.5 rounded text-sm">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <span className="text-muted-foreground">{value}</span>
+            )}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function Home() {
   const { data: scannedItems, isLoading } = useQuery<ScannedDataWithProduct[]>({
     queryKey: ["/api/scanned"],
@@ -75,11 +100,13 @@ export default function Home() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <img
-                    src={item.product.imageUrl}
-                    alt={item.product.name}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                  />
+                  <div className="relative h-48 mb-4">
+                    <img
+                      src={item.product.imageUrl}
+                      alt={item.product.name}
+                      className="absolute inset-0 w-full h-full object-contain bg-white/50 backdrop-blur-sm rounded-lg"
+                    />
+                  </div>
                   <div className="flex justify-between items-start mb-4">
                     <div>
                       <p className="font-medium">{item.product.category}</p>
@@ -98,9 +125,7 @@ export default function Home() {
                   </div>
                   <div className="bg-muted/50 p-4 rounded-lg">
                     <p className="font-medium mb-2">Specifications</p>
-                    <pre className="text-sm overflow-auto max-h-40">
-                      {JSON.stringify(item.product.specs, null, 2)}
-                    </pre>
+                    {formatSpecification(item.product.specs)}
                   </div>
                 </CardContent>
               </Card>
