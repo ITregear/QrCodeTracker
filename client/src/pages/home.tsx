@@ -3,10 +3,12 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { QrCode, Clock, Grid } from "lucide-react";
-import type { ScannedData } from "@shared/schema";
+import type { ScannedData, Product } from "@shared/schema";
+
+type ScannedDataWithProduct = ScannedData & { product: Product };
 
 export default function Home() {
-  const { data: scannedItems, isLoading } = useQuery<ScannedData[]>({
+  const { data: scannedItems, isLoading } = useQuery<ScannedDataWithProduct[]>({
     queryKey: ["/api/scanned"],
   });
 
@@ -44,6 +46,7 @@ export default function Home() {
                   <div className="h-6 bg-muted rounded" />
                 </CardHeader>
                 <CardContent>
+                  <div className="h-48 bg-muted rounded mb-4" />
                   <div className="h-20 bg-muted rounded" />
                 </CardContent>
               </Card>
@@ -61,18 +64,38 @@ export default function Home() {
               <Card key={item.id} className="overflow-hidden backdrop-blur-sm bg-card/50">
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between text-lg">
-                    <span>QR ID: {item.qrId}</span>
+                    <span>{item.product.name}</span>
                     <Clock className="h-4 w-4 text-primary" />
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <pre className="bg-muted/50 p-4 rounded-lg overflow-auto max-h-40 text-sm">
-                    {JSON.stringify(item.data, null, 2)}
-                  </pre>
-                  <p className="text-sm text-muted-foreground mt-4 flex items-center">
-                    <Clock className="h-3 w-3 mr-1" />
-                    {new Date(item.scannedAt).toLocaleString()}
-                  </p>
+                  <img 
+                    src={item.product.imageUrl} 
+                    alt={item.product.name}
+                    className="w-full h-48 object-cover rounded-lg mb-4"
+                  />
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <p className="font-medium">{item.product.category}</p>
+                      <p className="text-xl font-bold">
+                        ${(item.product.price / 100).toFixed(2)}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-muted-foreground">
+                        Scanned
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(item.scannedAt).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="bg-muted/50 p-4 rounded-lg">
+                    <p className="font-medium mb-2">Specifications</p>
+                    <pre className="text-sm overflow-auto max-h-40">
+                      {JSON.stringify(item.product.specs, null, 2)}
+                    </pre>
+                  </div>
                 </CardContent>
               </Card>
             ))

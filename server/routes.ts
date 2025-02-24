@@ -9,22 +9,47 @@ export async function registerRoutes(app: Express) {
     if (!data) {
       return res.status(404).json({ message: "Data not found" });
     }
-    res.json(data);
+
+    // Get associated product data
+    const product = await storage.getProduct(data.qrId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.json({ ...data, product });
   });
 
   app.get("/api/scanned", async (_req, res) => {
-    const data = await storage.getAllScannedData();
-    res.json(data);
+    const scannedItems = await storage.getAllScannedData();
+    const scannedWithProducts = await Promise.all(
+      scannedItems.map(async (item) => {
+        const product = await storage.getProduct(item.qrId);
+        return { ...item, product };
+      })
+    );
+    res.json(scannedWithProducts);
   });
 
   app.post("/api/scanned", async (req, res) => {
     try {
       const data = insertScannedDataSchema.parse(req.body);
       const saved = await storage.saveScannedData(data);
-      res.status(201).json(saved);
+
+      // Get associated product data
+      const product = await storage.getProduct(data.qrId);
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      res.status(201).json({ ...saved, product });
     } catch (error) {
       res.status(400).json({ message: "Invalid data format" });
     }
+  });
+
+  app.get("/api/products", async (_req, res) => {
+    const products = await storage.getAllProducts();
+    res.json(products);
   });
 
   return createServer(app);
