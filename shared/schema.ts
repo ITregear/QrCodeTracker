@@ -23,9 +23,11 @@ export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
 
-export const insertScannedDataSchema = createInsertSchema(scannedData).omit({
-  id: true,
-});
+export const insertScannedDataSchema = createInsertSchema(scannedData)
+  .omit({ id: true })
+  .extend({
+    scannedAt: z.coerce.date(),
+  });
 
 // Types
 export type Product = typeof products.$inferSelect;
