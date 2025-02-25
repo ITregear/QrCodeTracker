@@ -173,7 +173,8 @@ var vite_config_default = defineConfig({
   build: {
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true
-  }
+  },
+  base: "/QrCodeTracker/"
 });
 
 // server/vite.ts
